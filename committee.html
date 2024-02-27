@@ -3,9 +3,107 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>ICSP Workshop 2024 - committee</title>
+    <style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      body::-webkit-scrollbar {
+        width: 0;
+      }
+
+      body::-webkit-scrollbar-track {
+        display: none;
+      }
+
+      body::-webkit-scrollbar-thumb {
+        display: none;
+      }
+
+      nav {
+        background-color: black;
+        opacity: 0.9;
+        width: 100%;
+        height: 40px;
+        /* position: fixed; */
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+      }
+
+      nav a {
+        color: white;
+        text-decoration: none;
+        margin: 0 10px;
+        z-index: 10;
+        cursor: pointer;
+      }
+
+      nav a:hover {
+        text-decoration: underline;
+        z-index: 10;
+        cursor: pointer;
+      }
+
+      #infoBox {
+        height: fit-content;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+      }
+
+      #infoContainer {
+        width: 80%;
+        min-height: 750px;
+
+        background-color: #e9ecef;
+        border-radius: 10px;
+        padding: 20px;
+        margin-top: 25px;
+        margin-bottom: 25px;
+        box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 20px;
+      }
+
+      .content-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+
+      .content-section {
+        flex: 1;
+      }
+    </style>
   </head>
   <body>
-    Committee
+    <!-- Add a menu bar -->
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="papers.html">Call for papers</a>
+    </nav>
+    <div id="infoBox">
+      <div id="infoContainer">
+        <span class="content-title" style="font-size: 2.5rem">Committees</span>
+        <!-- Add a divider line -->
+        <hr style="width: 100%; margin: 5px 0" />
+
+        <div class="content-section">
+          <span class="content-title" style="font-size: 1.5rem">Program Committee</span>
+        </div>
+
+        <div class="content-section">
+          <span class="content-title" style="font-size: 1.5rem">Organisers and Program Chairs</span>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
