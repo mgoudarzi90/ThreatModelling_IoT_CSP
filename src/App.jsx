@@ -205,7 +205,15 @@ const App = () => {
         </Content>
       </Layout>
 
-      <Modal footer={null} centered open={showModal} width={'90vw'} height={'90vh'}>
+      <Modal
+        centered
+        footer={null}
+        onOk={() => setShowModal(false)}
+        onCancel={() => setShowModal(false)}
+        open={showModal}
+        width={'90vw'}
+        height={'90vh'}
+      >
         <div className="w-full h-full flex justify-center items-center">
           <Iframe
             url={currentLink}
