@@ -11,7 +11,7 @@ const tables = {
         ['T1593', 'https://attack.mitre.org/techniques/T1593/'],
         ['T1596', 'https://attack.mitre.org/techniques/T1596/'],
       ],
-      data: 'Not available',
+      data: 'Not Available',
     },
 
     'Resource Development': {
@@ -19,7 +19,7 @@ const tables = {
         ['T1586', 'https://attack.mitre.org/techniques/T1586/'],
         ['T1585', 'https://attack.mitre.org/techniques/T1585/'],
       ],
-      data: 'Not available',
+      data: 'Not Available',
     },
 
     'Initial Access': {
@@ -32,7 +32,7 @@ const tables = {
     },
 
     Execution: {
-      'data consumer': 'Not available',
+      'data consumer': 'Not Available',
       data: [
         ['T1204', 'https://attack.mitre.org/techniques/T1204/'],
         ['T0863', 'https://attack.mitre.org/techniques/T0863/'],
@@ -46,7 +46,7 @@ const tables = {
         ['T0859', 'https://attack.mitre.org/techniques/T0859/'],
         ['T1078', 'https://attack.mitre.org/techniques/T1078/'],
       ],
-      data: 'Not available',
+      data: 'Not Available',
     },
 
     'Privilege Escalation': {
@@ -54,7 +54,7 @@ const tables = {
         ['T1134', 'https://attack.mitre.org/techniques/T1134/'],
         ['T1078', 'https://attack.mitre.org/techniques/T1078/'],
       ],
-      data: 'Not available',
+      data: 'Not Available',
     },
 
     'Defense Evasion': {
@@ -186,10 +186,10 @@ const tables = {
         ['T1001', 'https://attack.mitre.org/techniques/T1001/'],
         ['T1616', 'https://attack.mitre.org/techniques/T1616/'],
       ],
-      data: 'Not available',
+      data: 'Not Available',
     },
 
-    Exfilteration: { 'data consumer': 'Not available', data: 'Not available' },
+    Exfilteration: { 'data consumer': 'Not Available', data: 'Not Available' },
 
     'Inhibit Response': {
       'data consumer': [['T0892', 'https://attack.mitre.org/techniques/T0892/']],
@@ -202,7 +202,7 @@ const tables = {
     },
 
     'Impair Control': {
-      'data consumer': 'Not available',
+      'data consumer': 'Not Available',
       data: [['T0856', 'https://attack.mitre.org/techniques/T0856/']],
     },
 
@@ -931,7 +931,7 @@ const tables = {
     },
 
     Exfilteration: {
-      hardware: 'Not available',
+      hardware: 'Not Available',
       Transmission: [
         ['T1020', ''],
         ['T1030', ''],
@@ -945,7 +945,7 @@ const tables = {
         ['T1029', ''],
         ['T1646', ''],
       ],
-      'OS/Firmware': 'Not available',
+      'OS/Firmware': 'Not Available',
       Application: [
         ['T1537', ''],
         ['T1052', ''],
@@ -999,12 +999,12 @@ const tables = {
         ['T0806', ''],
         ['T0836', ''],
       ],
-      Transmission: 'Not available',
+      Transmission: 'Not Available',
       'OS/Firmware': [
         ['T0839', ''],
         ['T0855', ''],
       ],
-      Application: 'Not available',
+      Application: 'Not Available',
     },
 
     Impact: {
@@ -1212,8 +1212,8 @@ const tables = {
     Exfilteration: {
       Virtualization: [['T1020', '']],
     },
-    'Inhibit Response': { Virtualization: 'Not available' },
-    'Impair Control': { Virtualization: 'Not available' },
+    'Inhibit Response': { Virtualization: 'Not Available' },
+    'Impair Control': { Virtualization: 'Not Available' },
     Impact: {
       Virtualization: [
         ['T1531', ''],

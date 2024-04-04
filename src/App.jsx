@@ -6,7 +6,7 @@ import {
   InfoCircleOutlined,
   ToolOutlined,
 } from '@ant-design/icons';
-import { Breadcrumb, Layout, Menu, theme, Table, Modal } from 'antd';
+import { Layout, Menu, Table, Modal, Tag } from 'antd';
 
 import tables from './data/table';
 import Iframe from 'react-iframe';
@@ -28,21 +28,24 @@ function getItem(label, key, icon, children) {
 
 function get_components_item(key, label) {
   if (key === '1') {
-    return [getItem('Data Consumer', `${label}-data consumer`), getItem('Data', `${label}-data`)];
+    return [
+      getItem('Data Consumer', `${label}-data consumer`, <TableOutlined />),
+      getItem('Data', `${label}-data`, <TableOutlined />),
+    ];
   } else if (key === '2') {
     return [
-      getItem('Hardware', `${label}-hardware`),
-      getItem('Transmission', `${label}-Transmission`),
-      getItem('OS/Firmware', `${label}-OS/Firmware`),
-      getItem('Application', `${label}-Application`),
+      getItem('Hardware', `${label}-hardware`, <TableOutlined />),
+      getItem('Transmission', `${label}-Transmission`, <TableOutlined />),
+      getItem('OS/Firmware', `${label}-OS/Firmware`, <TableOutlined />),
+      getItem('Application', `${label}-Application`, <TableOutlined />),
     ];
   }
-  return [getItem('Virtualization', `${label}-Virtualization`)];
+  return [getItem('Virtualization', `${label}-Virtualization`, <TableOutlined />)];
 }
 
 const items = [
   getItem('Overview', 'Welcome-Overview', <InfoCircleOutlined />),
-  getItem('Threat Monitor Framework', 'Questionnaire-', <QuestionCircleOutlined />, [
+  getItem('Threat Monitoring Framework', 'Questionnaire-', <QuestionCircleOutlined />, [
     getItem(
       'Data  Consumer and Data Components',
       'Questionnaire-Data',
@@ -90,23 +93,25 @@ const items = [
     getItem(
       'Data  Consumer and Data Components',
       'Report-Data',
-      <TableOutlined />,
+      <FileTextOutlined />,
       get_components_item('1', 'Report-Data')
     ),
 
     getItem(
       'Hardware, Transmission, OS/Firmware, and Application Components',
       'Report-Hardware',
-      <TableOutlined />,
+      <FileTextOutlined />,
       get_components_item('2', 'Report-Hardware')
     ),
 
     getItem(
       'Virtualization Component',
       'Report-Virtualization',
-      <TableOutlined />,
+      <FileTextOutlined />,
       get_components_item('3', 'Report-Virtualization')
     ),
+
+    getItem('Overview', 'Report-overview', <FileTextOutlined />),
   ]),
 ];
 
@@ -117,6 +122,7 @@ const App = () => {
   const [currentLink, setCurrentLink] = useState('');
 
   let reportData = tables;
+
   const [yesSelected, setYesSelected] = useState([]);
   const [noSelected, setNoSelected] = useState([]);
   const [inProcessSelected, setInProcessSelected] = useState([]);
@@ -246,25 +252,30 @@ const App = () => {
     {
       title: currentComponent,
       dataIndex: 'title',
-      render: (text, record) => (
-        <a
-          onClick={() => {
-            console.log(yesSelected);
-            console.log(record);
-            if (firstLevel === 'Tool') {
-              setShowToolModal(true);
-              setCurrentLink(record.link);
-            } else {
-              setShowModal(true);
-              setCurrentLink(record.link);
-            }
-            setSelectedRecord(record);
-          }}
-          style={{ background: `${computeStatus(record)}`, display: 'inline-block', padding: '5px' }}
-        >
-          {text}
-        </a>
-      ),
+      render: (text, record) => {
+        if (text === 'Not Available') {
+          return <Tag color="red">{text}</Tag>;
+        }
+        return (
+          <a
+            onClick={() => {
+              console.log(yesSelected);
+              console.log(record);
+              if (firstLevel === 'Tool') {
+                setShowToolModal(true);
+                setCurrentLink(record.link);
+              } else {
+                setShowModal(true);
+                setCurrentLink(record.link);
+              }
+              setSelectedRecord(record);
+            }}
+            style={{ background: `${computeStatus(record)}`, display: 'inline-block', padding: '5px' }}
+          >
+            {text}
+          </a>
+        );
+      },
     },
   ];
 
@@ -343,7 +354,8 @@ const App = () => {
           {/* Add a question ask do you consider this attack?  */}
           <div className="w-full ml-8">
             <div className="">
-              Do you consider this attack? <span className=" font-semibold ">Please select the appropriate answer</span>
+              Is this threat considered in your IoT platform/solution?{' '}
+              <span className=" font-semibold ">Please select an appropriate option</span>
             </div>
 
             {/* Add three button as radio button, YES/NO/In-process */}
@@ -357,7 +369,7 @@ const App = () => {
                 }}
                 className="bg-green-500 text-white px-2 py-2 rounded-lg"
               >
-                YES
+                Yes
               </button>
 
               <button
@@ -369,7 +381,7 @@ const App = () => {
                 }}
                 className="bg-red-500 text-white px-2 py-2 rounded-lg"
               >
-                NO
+                No
               </button>
 
               <button
