@@ -7,6 +7,7 @@ import {
   ToolOutlined,
   DownloadOutlined,
 } from '@ant-design/icons';
+
 import { Layout, Menu, Table, Modal, Tag, Card } from 'antd';
 
 import tables from './data/table';
@@ -163,12 +164,78 @@ const App = () => {
     return target;
   };
 
+  const structureReportFile = (data, tableId, text, tableName) => {
+    data = data[tableId];
+
+    text += `Table: ${tableName}\n\n`;
+    const keys = Object.keys(data);
+    keys.forEach((key) => {
+      const components = data[key];
+      const componentKeys = Object.keys(components);
+      componentKeys.forEach((componentKey) => {
+        const titles = components[componentKey];
+        if (titles === 'Not Available') {
+          text += `${key} -> ${componentKey} -> ${titles} -> N/A\n`;
+        } else {
+          for (let i = 0; i < titles.length; i++) {
+            const title = titles[i];
+            if (title[2] === undefined) {
+              text += `${key} -> ${componentKey} -> ${title[0]} -> N/A\n`;
+            } else {
+              text += `${key} -> ${componentKey} -> ${title[0]} -> ${title[2]}\n`;
+            }
+          }
+        }
+      });
+    });
+    return text;
+  };
+
   const changeTable = (key) => {
     const titles = key.split('-');
 
     setFirstLevel(titles[0]);
     if (titles[0] === 'Report') {
-      window.open('https://www.google.com', '_blank');
+      let target = '';
+      let table_name = '';
+      if (titles[1] === 'Data') {
+        target = 'table1';
+        table_name = 'Data Consumer and Data Components';
+      } else if (titles[1] === 'Hardware') {
+        target = 'table2';
+        table_name = 'Hardware, Transmission, OS/Firmware, and Application Components';
+      } else if (titles[1] === 'Virtualization') {
+        target = 'table3';
+        table_name = 'Virtualization Component';
+      }
+
+      let text = '';
+
+      if (target === '') {
+        text = structureReportFile(reportData, 'table1', text, 'Data Consumer and Data Components');
+        text += '\n\n';
+        text = structureReportFile(
+          reportData,
+          'table2',
+          text,
+          'Hardware, Transmission, OS/Firmware, and Application Components'
+        );
+        text += '\n\n';
+        text = structureReportFile(reportData, 'table3', text, 'Virtualization Component');
+      } else {
+        text = structureReportFile(reportData, target, text, table_name);
+      }
+
+      const element = document.createElement('a');
+      const file = new Blob([text], { type: 'text/plain' });
+      element.href = URL.createObjectURL(file);
+      if (target === '') {
+        element.download = 'Report.txt';
+      } else {
+        element.download = `${table_name}.txt`;
+      }
+      document.body.appendChild(element); // Required for this to work in FireFox
+      element.click();
       return;
     }
 
@@ -250,8 +317,6 @@ const App = () => {
         return (
           <a
             onClick={() => {
-              console.log(yesSelected);
-              console.log(record);
               if (firstLevel === 'Tool') {
                 setShowToolModal(true);
                 setCurrentLink(record.link);
@@ -429,8 +494,6 @@ const App = () => {
                       reportData[currentTable][category][currentComponent][i].push('Yes');
                     }
                   }
-
-                  console.log(reportData);
                 }}
                 className="bg-green-500 text-white px-2 py-2 rounded-lg"
               >
@@ -443,6 +506,14 @@ const App = () => {
                   newNoSelected.push(selectedRecord);
                   setNoSelected(newNoSelected);
                   setShowToolModal(false);
+
+                  const category = selectedRecord.category;
+                  // From the reportData, for this specific table and record, add the status as No
+                  for (let i = 0; i < reportData[currentTable][category][currentComponent].length; i++) {
+                    if (reportData[currentTable][category][currentComponent][i][0] === selectedRecord.title) {
+                      reportData[currentTable][category][currentComponent][i].push('No');
+                    }
+                  }
                 }}
                 className="bg-red-500 text-white px-2 py-2 rounded-lg"
               >
@@ -455,6 +526,14 @@ const App = () => {
                   newInProcessSelected.push(selectedRecord);
                   setInProcessSelected(newInProcessSelected);
                   setShowToolModal(false);
+
+                  const category = selectedRecord.category;
+                  // From the reportData, for this specific table and record, add the status as In-process
+                  for (let i = 0; i < reportData[currentTable][category][currentComponent].length; i++) {
+                    if (reportData[currentTable][category][currentComponent][i][0] === selectedRecord.title) {
+                      reportData[currentTable][category][currentComponent][i].push('In-process');
+                    }
+                  }
                 }}
                 className="bg-yellow-500 text-white px-2 py-2 rounded-lg"
               >
