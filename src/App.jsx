@@ -116,13 +116,18 @@ const App = () => {
   const [currentData, setCurrentData] = useState([]);
   const [currentLink, setCurrentLink] = useState('');
 
+  let reportData = tables;
+  const [yesSelected, setYesSelected] = useState([]);
+  const [noSelected, setNoSelected] = useState([]);
+  const [inProcessSelected, setInProcessSelected] = useState([]);
+  const [selectedRecord, setSelectedRecord] = useState({});
+
   const [firstLevel, setFirstLevel] = useState('Welcome');
 
   useEffect(() => {
     document.title = 'IoT Threat Analysis Tool';
   }, []);
 
-  // Get the 90vw and 90vh size
   const iframe_height = window.innerHeight * 0.7;
   const iframe_width = window.innerWidth * 0.7;
 
@@ -139,7 +144,6 @@ const App = () => {
   const structureData = (tableId, Component) => {
     const target = [];
     const table = tables[tableId];
-    console.log(table);
     const keys = Object.keys(table);
     keys.forEach((key) => {
       const techniques = table[key][Component];
@@ -189,6 +193,28 @@ const App = () => {
     setCurrentComponent(titles[2]);
   };
 
+  const computeStatus = (record) => {
+    // Loop through the selected records and check if the record is in the selected records
+    // Check the actual value
+    const checkGreen = yesSelected.find((item) => item.category === record.category && item.title === record.title);
+    if (checkGreen) {
+      return 'green';
+    }
+
+    const checkRed = noSelected.find((item) => item.category === record.category && item.title === record.title);
+    if (checkRed) {
+      return 'red';
+    }
+
+    const checkYellow = inProcessSelected.find(
+      (item) => item.category === record.category && item.title === record.title
+    );
+    if (checkYellow) {
+      return 'yellow';
+    }
+    return 'white';
+  };
+
   const columns = [
     {
       title: 'Category',
@@ -222,8 +248,9 @@ const App = () => {
       dataIndex: 'title',
       render: (text, record) => (
         <a
-          target="_blank"
           onClick={() => {
+            console.log(yesSelected);
+            console.log(record);
             if (firstLevel === 'Tool') {
               setShowToolModal(true);
               setCurrentLink(record.link);
@@ -231,7 +258,9 @@ const App = () => {
               setShowModal(true);
               setCurrentLink(record.link);
             }
+            setSelectedRecord(record);
           }}
+          style={{ background: `${computeStatus(record)}`, display: 'inline-block', padding: '5px' }}
         >
           {text}
         </a>
@@ -319,9 +348,41 @@ const App = () => {
 
             {/* Add three button as radio button, YES/NO/In-process */}
             <div className=" w-fit flex justify-between my-4 pl-8 gap-5">
-              <button className="bg-green-500 text-white px-2 py-2 rounded-lg">YES</button>
-              <button className="bg-red-500 text-white px-2 py-2 rounded-lg">NO</button>
-              <button className="bg-yellow-500 text-white px-2 py-2 rounded-lg">In-process</button>
+              <button
+                onClick={() => {
+                  const newYesSelected = [...yesSelected];
+                  newYesSelected.push(selectedRecord);
+                  setYesSelected(newYesSelected);
+                  setShowToolModal(false);
+                }}
+                className="bg-green-500 text-white px-2 py-2 rounded-lg"
+              >
+                YES
+              </button>
+
+              <button
+                onClick={() => {
+                  const newNoSelected = [...noSelected];
+                  newNoSelected.push(selectedRecord);
+                  setNoSelected(newNoSelected);
+                  setShowToolModal(false);
+                }}
+                className="bg-red-500 text-white px-2 py-2 rounded-lg"
+              >
+                NO
+              </button>
+
+              <button
+                onClick={() => {
+                  const newInProcessSelected = [...inProcessSelected];
+                  newInProcessSelected.push(selectedRecord);
+                  setInProcessSelected(newInProcessSelected);
+                  setShowToolModal(false);
+                }}
+                className="bg-yellow-500 text-white px-2 py-2 rounded-lg"
+              >
+                In-process
+              </button>
             </div>
           </div>
           <Iframe
