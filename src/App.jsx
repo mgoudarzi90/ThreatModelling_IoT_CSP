@@ -21,9 +21,9 @@ function get_components_item(key, label) {
     return [getItem('Data Consumer', `${label}-data consumer`), getItem('Data', `${label}-data`)];
   } else if (key === '2') {
     return [
-      getItem('Hardware', `${label}-Hardware`),
+      getItem('Hardware', `${label}-hardware`),
       getItem('Transmission', `${label}-Transmission`),
-      getItem('OS/Firmware', `${label}-OSFirmware`),
+      getItem('OS/Firmware', `${label}-OS/Firmware`),
       getItem('Application', `${label}-Application`),
     ];
   }
@@ -97,6 +97,7 @@ const App = () => {
   const structureData = (tableId, Component) => {
     const target = [];
     const table = tables[tableId];
+    console.log(table);
     const keys = Object.keys(table);
     keys.forEach((key) => {
       const techniques = table[key][Component];
@@ -110,7 +111,7 @@ const App = () => {
       } else {
         for (let i = 0; i < techniques.length; i++) {
           const title = techniques[i][0];
-          const link = techniques[i][1];
+          const link = `https://attack.mitre.org/techniques/${title}/`;
           target.push({
             category: key,
             title,
@@ -204,15 +205,7 @@ const App = () => {
         </Content>
       </Layout>
 
-      <Modal
-        title="Vertically centered modal dialog"
-        centered
-        open={showModal}
-        onOk={() => setShowModal(false)}
-        onCancel={() => setShowModal(false)}
-        width={'90vw'}
-        height={'90vh'}
-      >
+      <Modal footer={null} centered open={showModal} width={'90vw'} height={'90vh'}>
         <div className="w-full h-full flex justify-center items-center">
           <Iframe
             url={currentLink}
