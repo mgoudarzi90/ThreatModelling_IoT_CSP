@@ -128,6 +128,8 @@ const App = () => {
 
   const [showModal, setShowModal] = useState(false);
 
+  const [showToolModal, setShowToolModal] = useState(false);
+
   const [isOverview, setIsOverview] = useState(true);
 
   const handleMenuClick = (e) => {
@@ -222,8 +224,13 @@ const App = () => {
         <a
           target="_blank"
           onClick={() => {
-            setShowModal(true);
-            setCurrentLink(record.link);
+            if (firstLevel === 'Tool') {
+              setShowToolModal(true);
+              setCurrentLink(record.link);
+            } else {
+              setShowModal(true);
+              setCurrentLink(record.link);
+            }
           }}
         >
           {text}
@@ -285,6 +292,42 @@ const App = () => {
             url={currentLink}
             width={iframe_width}
             height={iframe_height}
+            loading="lazy"
+            display="block"
+            position="relative"
+            styles={{ border: '3px solid gray', borderRadius: '8px' }}
+          />
+        </div>
+      </Modal>
+
+      <Modal
+        centered
+        footer={null}
+        onOk={() => setShowToolModal(false)}
+        onCancel={() => setShowToolModal(false)}
+        open={showToolModal}
+        width={'90vw'}
+        height={'90vh'}
+        title="Threat Analysis Tool"
+      >
+        <div className="w-full h-full flex flex-col justify-center items-center">
+          {/* Add a question ask do you consider this attack?  */}
+          <div className="w-full ml-8">
+            <div className="">
+              Do you consider this attack? <span className=" font-semibold ">Please select the appropriate answer</span>
+            </div>
+
+            {/* Add three button as radio button, YES/NO/In-process */}
+            <div className=" w-fit flex justify-between my-4 pl-8 gap-5">
+              <button className="bg-green-500 text-white px-2 py-2 rounded-lg">YES</button>
+              <button className="bg-red-500 text-white px-2 py-2 rounded-lg">NO</button>
+              <button className="bg-yellow-500 text-white px-2 py-2 rounded-lg">In-process</button>
+            </div>
+          </div>
+          <Iframe
+            url={currentLink}
+            width={iframe_width}
+            height={iframe_height - 100}
             loading="lazy"
             display="block"
             position="relative"
