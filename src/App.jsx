@@ -5,8 +5,9 @@ import {
   TableOutlined,
   InfoCircleOutlined,
   ToolOutlined,
+  DownloadOutlined,
 } from '@ant-design/icons';
-import { Layout, Menu, Table, Modal, Tag } from 'antd';
+import { Layout, Menu, Table, Modal, Tag, Card } from 'antd';
 
 import tables from './data/table';
 import Iframe from 'react-iframe';
@@ -89,29 +90,15 @@ const items = [
       get_components_item('3', 'Tool-Virtualization')
     ),
   ]),
+
   getItem('Report', 'Report-', <FileTextOutlined />, [
-    getItem(
-      'Data  Consumer and Data Components',
-      'Report-Data',
-      <FileTextOutlined />,
-      get_components_item('1', 'Report-Data')
-    ),
+    getItem('Data  Consumer and Data Components', 'Report-Data', <DownloadOutlined />),
 
-    getItem(
-      'Hardware, Transmission, OS/Firmware, and Application Components',
-      'Report-Hardware',
-      <FileTextOutlined />,
-      get_components_item('2', 'Report-Hardware')
-    ),
+    getItem('Hardware, Transmission, OS/Firmware, and Application Components', 'Report-Hardware', <DownloadOutlined />),
 
-    getItem(
-      'Virtualization Component',
-      'Report-Virtualization',
-      <FileTextOutlined />,
-      get_components_item('3', 'Report-Virtualization')
-    ),
+    getItem('Virtualization Component', 'Report-Virtualization', <DownloadOutlined />),
 
-    getItem('Overview', 'Report-overview', <FileTextOutlined />),
+    getItem('Overview', 'Report-Overview', <DownloadOutlined />),
   ]),
 ];
 
@@ -122,6 +109,8 @@ const App = () => {
   const [currentLink, setCurrentLink] = useState('');
 
   let reportData = tables;
+
+  console.log(reportData);
 
   const [yesSelected, setYesSelected] = useState([]);
   const [noSelected, setNoSelected] = useState([]);
@@ -153,7 +142,6 @@ const App = () => {
     const keys = Object.keys(table);
     keys.forEach((key) => {
       const techniques = table[key][Component];
-      // const consumerRowCount = typeof techniques === 'string' ? 1 : techniques.length;
       if (typeof techniques === 'string') {
         target.push({
           category: key,
@@ -176,10 +164,13 @@ const App = () => {
   };
 
   const changeTable = (key) => {
-    console.log(key);
     const titles = key.split('-');
 
     setFirstLevel(titles[0]);
+    if (titles[0] === 'Report') {
+      window.open('https://www.google.com', '_blank');
+      return;
+    }
 
     if (titles[1] === 'Data') {
       setCurrentTable('table1');
@@ -300,17 +291,81 @@ const App = () => {
           {isOverview === false ? (
             <Table dataSource={currentData} columns={columns} bordered pagination={false} />
           ) : (
-            <div className="h-full w-full flex flex-row">
+            <div className="h-full w-full flex flex-col">
               <div className="w-full flex justify-between">
                 <div className="flex flex-col">
-                  <div className="text-xl text-gray-600">Welcome to </div>
-                  <div className="text-2xl font-bold  ">IoT Threat Analysis Tool</div>
+                  <div className="text-2xl text-gray-600">Welcome to </div>
+                  <div className="text-3xl font-bold  ">IoT Threat Analysis Tool</div>
                 </div>
                 {/* LOGOs */}
                 <div className="flex absolute top-5 right-12 gap-6 items-center justify-center">
-                  <img src={UNSW_LOGO} alt="UNSW-Logo" width={70} />
-                  <img src={Cisco_LOGO} alt="Cisco-Logo" width={70} />
-                  <img src={CSCRC_LOGO} alt="CSCRC-Logo" width={55} />
+                  <img src={UNSW_LOGO} alt="UNSW-Logo" width={100} />
+                  <img src={Cisco_LOGO} alt="Cisco-Logo" width={100} />
+                  <img src={CSCRC_LOGO} alt="CSCRC-Logo" width={90} />
+                </div>
+              </div>
+
+              <div className=" mt-36 w-full h-full ">
+                <div className="flex w-full h-full gap-3">
+                  <div className="flex-1 h-full w-full flex flex-col items-center ">
+                    <Card
+                      style={{
+                        width: '90%',
+                        height: 'fit-content',
+                      }}
+                    >
+                      <p className=" text-base ">
+                        Internet of Things (IoT) deployments consist of interconnected systems and devices that rely on
+                        context-sharing platforms to facilitate interoperability and information exchange. As such,
+                        these platforms serve as fundamental components for IoT deployments, and safeguarding their
+                        security is crucial to ensure resilience and reliability for these complex "systems of systems."
+                      </p>
+                    </Card>
+
+                    <Card
+                      style={{
+                        width: '90%',
+                        marginTop: '38px',
+                        height: 'fit-content',
+                      }}
+                    >
+                      <p className=" text-base ">
+                        In this context, we embark on the initial steps towards a systematic and comprehensive approach
+                        to addressing the security of IoT context-sharing platforms. We present a framework for threat
+                        modeling and security analysis tailored to generic IoT context-sharing platforms, leveraging the
+                        MITRE ATT&CK framework.
+                      </p>
+                    </Card>
+                  </div>
+
+                  <div className="flex-1 h-full flex flex-col items-center">
+                    <Card
+                      style={{
+                        width: '90%',
+                        height: 'fit-content',
+                      }}
+                    >
+                      <p className="text-base">This page serves as a gateway to:</p>
+                      <ul className="list-disc ml-5 text-base">
+                        <li className="mt-2">
+                          A proposed threat modeling framework designed specifically for IoT context-sharing platforms.
+                        </li>
+                        <li className="mt-2">
+                          A threat modeling analysis tool, built upon the proposed framework, to assess various IoT
+                          context-sharing solutions, such as those in smart city or smart transportation domains.
+                        </li>
+                        <li className="mt-2">
+                          An automated report generation feature, driven by the threat analysis questionnaire, aimed at
+                          providing enhanced visibility into potential threats within specific context-sharing
+                          solutions.
+                        </li>
+                      </ul>
+                      <p className="mt-3 text-base">
+                        By offering these resources, we aim to empower stakeholders to proactively address security
+                        concerns within IoT deployments, thereby fostering a more secure and resilient IoT ecosystem.
+                      </p>
+                    </Card>
+                  </div>
                 </div>
               </div>
             </div>
@@ -366,6 +421,16 @@ const App = () => {
                   newYesSelected.push(selectedRecord);
                   setYesSelected(newYesSelected);
                   setShowToolModal(false);
+
+                  const category = selectedRecord.category;
+                  // From the reportData, for this specific table and record, add the status as Yes
+                  for (let i = 0; i < reportData[currentTable][category][currentComponent].length; i++) {
+                    if (reportData[currentTable][category][currentComponent][i][0] === selectedRecord.title) {
+                      reportData[currentTable][category][currentComponent][i].push('Yes');
+                    }
+                  }
+
+                  console.log(reportData);
                 }}
                 className="bg-green-500 text-white px-2 py-2 rounded-lg"
               >
