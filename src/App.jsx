@@ -1,9 +1,19 @@
-import React, { useState } from 'react';
-import { FileTextOutlined, QuestionCircleOutlined, TableOutlined } from '@ant-design/icons';
+import React, { useState, useEffect } from 'react';
+import {
+  FileTextOutlined,
+  QuestionCircleOutlined,
+  TableOutlined,
+  InfoCircleOutlined,
+  ToolOutlined,
+} from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme, Table, Modal } from 'antd';
 
 import tables from './data/table';
 import Iframe from 'react-iframe';
+
+import UNSW_LOGO from './assets/UNSW-Logo-no-background.png';
+import Cisco_LOGO from './assets/Cisco-Logo-no-background.png';
+import CSCRC_LOGO from './assets/CSCRC-Logo-no-background.png';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -31,7 +41,8 @@ function get_components_item(key, label) {
 }
 
 const items = [
-  getItem('Risk Questionnaire', 'Questionnaire-', <QuestionCircleOutlined />, [
+  getItem('Overview', 'Welcome-Overview', <InfoCircleOutlined />),
+  getItem('Threat Monitor Framework', 'Questionnaire-', <QuestionCircleOutlined />, [
     getItem(
       'Data  Consumer and Data Components',
       'Questionnaire-Data',
@@ -53,7 +64,28 @@ const items = [
       get_components_item('3', 'Questionnaire-Virtualization')
     ),
   ]),
+  getItem('Threat Analysis Tool', 'Tool', <ToolOutlined />, [
+    getItem(
+      'Data  Consumer and Data Components',
+      'Tool-Data',
+      <TableOutlined />,
+      get_components_item('1', 'Tool-Data')
+    ),
 
+    getItem(
+      'Hardware, Transmission, OS/Firmware, and Application Components',
+      'Tool-Hardware',
+      <TableOutlined />,
+      get_components_item('2', 'Tool-Hardware')
+    ),
+
+    getItem(
+      'Virtualization Component',
+      'Tool-Virtualization',
+      <TableOutlined />,
+      get_components_item('3', 'Tool-Virtualization')
+    ),
+  ]),
   getItem('Report', 'Report-', <FileTextOutlined />, [
     getItem(
       'Data  Consumer and Data Components',
@@ -84,11 +116,19 @@ const App = () => {
   const [currentData, setCurrentData] = useState([]);
   const [currentLink, setCurrentLink] = useState('');
 
+  const [firstLevel, setFirstLevel] = useState('Welcome');
+
+  useEffect(() => {
+    document.title = 'IoT Threat Analysis Tool';
+  }, []);
+
   // Get the 90vw and 90vh size
   const iframe_height = window.innerHeight * 0.7;
   const iframe_width = window.innerWidth * 0.7;
 
   const [showModal, setShowModal] = useState(false);
+
+  const [isOverview, setIsOverview] = useState(true);
 
   const handleMenuClick = (e) => {
     changeTable(e.key);
@@ -124,16 +164,25 @@ const App = () => {
   };
 
   const changeTable = (key) => {
+    console.log(key);
     const titles = key.split('-');
+
+    setFirstLevel(titles[0]);
+
     if (titles[1] === 'Data') {
       setCurrentTable('table1');
+      setIsOverview(false);
       setCurrentData(structureData('table1', titles[2]));
     } else if (titles[1] === 'Hardware') {
       setCurrentTable('table2');
+      setIsOverview(false);
       setCurrentData(structureData('table2', titles[2]));
-    } else {
+    } else if (titles[1] === 'Virtualization') {
       setCurrentTable('table3');
+      setIsOverview(false);
       setCurrentData(structureData('table3', titles[2]));
+    } else if (titles[1] === 'Overview') {
+      setIsOverview(true);
     }
     setCurrentComponent(titles[2]);
   };
@@ -191,8 +240,8 @@ const App = () => {
         <div className="demo-logo-vertical" />
         <Menu
           theme="dark"
-          defaultSelectedKeys={['Questionnaire-']}
-          defaultOpenKeys={['Questionnaire-']}
+          defaultSelectedKeys={['Welcome-Overview']}
+          defaultOpenKeys={['Welcome-Overview']}
           mode="inline"
           items={items}
           onClick={handleMenuClick}
@@ -201,7 +250,24 @@ const App = () => {
 
       <Layout style={{ flex: 1, overflow: 'hidden' }}>
         <Content style={{ margin: '16px', overflow: 'auto' }}>
-          <Table dataSource={currentData} columns={columns} bordered pagination={false} />
+          {isOverview === false ? (
+            <Table dataSource={currentData} columns={columns} bordered pagination={false} />
+          ) : (
+            <div className="h-full w-full flex flex-row">
+              <div className="w-full flex justify-between">
+                <div className="flex flex-col">
+                  <div className="text-xl text-gray-600">Welcome to </div>
+                  <div className="text-2xl font-bold  ">IoT Threat Analysis Tool</div>
+                </div>
+                {/* LOGOs */}
+                <div className="flex absolute top-5 right-12 gap-6 items-center justify-center">
+                  <img src={UNSW_LOGO} alt="UNSW-Logo" width={70} />
+                  <img src={Cisco_LOGO} alt="Cisco-Logo" width={70} />
+                  <img src={CSCRC_LOGO} alt="CSCRC-Logo" width={55} />
+                </div>
+              </div>
+            </div>
+          )}
         </Content>
       </Layout>
 
